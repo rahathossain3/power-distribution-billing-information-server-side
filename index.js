@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 
-
+//server user and password
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.y5m5n.mongodb.net/?retryWrites=true&w=majority`;
 
 //mongodb client
@@ -23,15 +23,55 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 
+/* 
+// for jwt verifications 
+function verifyJWT(req, res, next) {
+    // 1: read authHeader
+    const authHeader = req.headers.authorization;
+    // 2
+    if (!authHeader) {
+        return res.status(401).send({ message: 'UnAuthorized access' });
+    }
+    //2.1: jodi token thake (get token)
+    const token = authHeader.split(' ')[1];
+    // 3: verify
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+        if (err) {
+            return res.status(403).send({ message: 'Forbidden access' })
+        }
+        req.decoded = decoded;
+        //4:next
+        next();
+        // console.log(decoded); 
+    });
+    // console.log('abc');
+}
+
+ */
+
+
+
+
 async function run() {
     try {
         await client.connect();
-        console.log('database connected')
-        //service
-        // const serviceCollection = client.db('doctors_portal').collection('services');
+        // console.log('database connected')
+
+        //All Biller Information
+        const billerInformation = client.db('biller_information').collection('billing-list');
 
 
 
+        //All Biller Information get all Information
+        app.get('/billing-list', async (req, res) => {
+            const query = {};
+            const cursor = billerInformation.find(query);
+            // const cursor = serviceCollection.find(query).project({ name: 1 });
+            const billerInfo = await cursor.toArray();
+
+            res.send(billerInfo)
+
+        })
 
 
 
