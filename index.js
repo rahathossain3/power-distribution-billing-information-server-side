@@ -84,10 +84,10 @@ async function run() {
                 })
          */
 
-        //add product from client
+        //add new Biller info client
         app.post('/add-billing', async (req, res) => {
-            const newProduct = req.body;
-            const result = await billerInformation.insertOne(newProduct);
+            const newBiller = req.body;
+            const result = await billerInformation.insertOne(newBiller);
             res.send(result);
         })
 
