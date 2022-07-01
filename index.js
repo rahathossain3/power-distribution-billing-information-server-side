@@ -67,15 +67,29 @@ async function run() {
             const query = {};
             const cursor = billerInformation.find(query);
             // const cursor = serviceCollection.find(query).project({ name: 1 });
-            const billerInfo = await cursor.toArray();
+            const billersInfo = await cursor.toArray();
 
-            res.send(billerInfo)
-
+            res.send(billersInfo);
         })
 
 
 
+        /* 
+                // get single product 
+                app.get('/product/:id', async (req, res) => {
+                    const id = req.params.id;
+                    const query = { _id: ObjectId(id) };
+                    const product = await productCollection.findOne(query);
+                    res.send(product);
+                })
+         */
 
+        //add product from client
+        app.post('/add-billing', async (req, res) => {
+            const newProduct = req.body;
+            const result = await billerInformation.insertOne(newProduct);
+            res.send(result);
+        })
 
 
 
